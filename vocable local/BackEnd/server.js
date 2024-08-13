@@ -15,7 +15,7 @@ app.listen(9992, function check(err)
     if(err){
         console.log("errore");
     }else{
-        console.log("daje");
+        console.log("daje sta ascoltando");
     }
 });
 
@@ -26,10 +26,10 @@ mongoose.connect("mongodb://localho.st:27017/utenti", //NB: "utenti" è il nome 
         useUnifiedTopology: true
     }).then(
         async()=> {
-            console.log("Database connesso")
+            console.log("Database utenti connesso")
         },
         (err) => {
-            console.log(err, "quindi database non connesso")
+            console.log(err, "quindi database utenti non connesso")
         }
     );
     app.use(express.json());

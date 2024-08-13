@@ -5,23 +5,30 @@ var encryptor = require('simple-encryptor')(key);
 module.exports.createUtenteDBService = (utenteDetails) => {
 
     return new Promise(function myFN(resolve, reject) {
-
-        var utenteModelData = new utenteModel();
-
-        utenteModelData.email = utenteDetails.email; //una riga per ogni dato contenuto nella "classe" utente
-        utenteModelData.password = utenteDetails.password;
-        utenteModelData.nickname = utenteDetails.nickname;
-        var encrypted = encryptor.encrypt(utenteDetails.password); //cripta la password per proteggerla in caso di fuga di dati
-        utenteModelData.password = encrypted;
-
-        utenteModelData.save(function resultHandle(error, result) { //salva i dati
+        utenteModel.findOne({ email: utenteDetails.email }, function (error, existingUser) {
             if (error) {
-                reject(false);
-            } else {
-                resolve(true);
-            }
-        });
-    });
+                reject({ status: false, msg: "Errore durante la verifica dell'email" });
+            } else if (existingUser) {
+                reject({ status: false, msg: "Email già in uso" }); // Email già presente nel sistema
+            } else{
+
+            var utenteModelData = new utenteModel();
+
+            utenteModelData.email = utenteDetails.email; //una riga per ogni dato contenuto nella "classe" utente
+            utenteModelData.password = utenteDetails.password;
+            utenteModelData.nickname = utenteDetails.nickname;
+            var encrypted = encryptor.encrypt(utenteDetails.password); //cripta la password per proteggerla in caso di fuga di dati
+            utenteModelData.password = encrypted;
+
+            utenteModelData.save(function resultHandle(error, result) { //salva i dati
+                if (error) {
+                    reject(false);
+                } else {
+                    resolve(true);
+                }
+            });
+        }}
+    )});
 }
 
 module.exports.loginUtenteDBService = (utenteDetails)=>

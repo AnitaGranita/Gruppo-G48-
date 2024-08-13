@@ -18,6 +18,7 @@
     "mongoose": "^6.10.0",
     "simple-keyboard": "^3.7.51",
     "vue": "^3.3.11",
+    "vue-chartjs": "^5.3.1",
     "vue-router": "^4.4.0",
     "vuetify": "^3.6.11"
   },

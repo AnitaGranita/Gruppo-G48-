@@ -56,8 +56,27 @@ export default{
             password:this.password,
             nickname:this.nickname
           }).then((response)=>
-           {console.log(response);
-          });
+           {
+            axios.post(
+          '/api/utente/createstats',
+          {
+            email:this.email,
+            gameswon: 0,
+            gameslost: 0,
+            totalgames: 0,
+            won1 : 0,
+            won2 : 0,
+            won3 : 0,
+            won4 : 0,
+            won5 : 0,
+            won6 : 0,
+          }).then((response)=>
+        {location.href = '../registrationcomplete';
+        })
+        if(!response) location.href = '../home';
+            console.log(response)
+          })
+          if(!response) alert('errore di registrazione');
     },
   },
 }

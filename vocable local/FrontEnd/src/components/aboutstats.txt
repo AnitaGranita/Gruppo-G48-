@@ -1,0 +1,23 @@
+mettere le barre corrispondenti al numero di tentativi tipo wordle
+num partite giocate
+% vittorie
+current/max streak
+
+id
+nick
+pass
+email
+
+
+
+id
+partitecon1
+partitecon2
+partitecon3
+partitecon4
+partitecon5
+partitecon6
+won/lost
+maxs
+currs
+num partite
