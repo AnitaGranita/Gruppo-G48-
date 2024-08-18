@@ -1,5 +1,6 @@
 const { response } = require("express");
 var utenteService = require("./utenteServices");
+const { default: store } = require("../store");
 
 var createUtenteControllerFn = async (req, res) => //request, response
 {
@@ -31,7 +32,7 @@ var loginUtenteControllerFn = async (req,res) => {
         result = await utenteService.loginUtenteDBService(req.body);
         if(result.status){
             console.log("true");
-            console.log(response.body)
+            console.log(response.body);
             res.send({ "status":true, "message":result.msg,"token":result.token,"id":result.id});
         }
         else{

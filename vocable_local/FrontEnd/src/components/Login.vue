@@ -5,6 +5,11 @@
         <img src="/logoVuoto.png" alt="Vocable Logo" />
         <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Vocable</span>
 
+        <!-- Mostra un messaggio di benvenuto se l'utente è autenticato -->
+        <div v-if="authenticated" class="welcome-message">
+          <p>Benvenuto, {{ user.name }}!</p>
+        </div>
+
         <v-form v-model="isFormValid" lazy-validation @submit.prevent="onLogin">
           <v-text-field class="required" type="email" :rules="emailRules" v-model="email" label="Email"
             variant="underlined"></v-text-field>
@@ -20,8 +25,13 @@
 
 <script>
 import axios from 'axios';
+import { mapActions } from 'vuex';
+import { mapGetters } from 'vuex';
+import store from '../store'
+import { list } from 'postcss';
 
 export default {
+  namespaced: true,
   data() {
     return {
       isFormValid: false,
@@ -38,12 +48,29 @@ export default {
       ]
     };
   },
+  computed:{
+    ...mapGetters({
+      authenticated: 'auth/authenticated',
+      user : 'auth/user'
+    })
+  },
   methods: {
+    ...mapActions({
+      signIn: 'auth/signIn'
+    }),
+
     async onLogin() {
       try {
         this.loading = true;
 
-        const response = await fetch('/api/utente/login', {
+        const credentials = { //crea un oggetto contenente email e password che verranno usate su auth per loggare
+          email: this.email,
+          password: this.password
+        }
+
+        this.signIn(credentials);
+
+        /*const response = await fetch('/api/utente/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -54,7 +81,6 @@ export default {
 
         const data = await response.json();
         console.log('Response Data:', data); // Verifica se il token è presente in `data`
-
         if (data.status) {
           localStorage.setItem('token', data.token); // Assicurati che `data.token` sia definito
           axios.defaults.headers.common['Authorization'] = 'Bearer ' + data.token;
@@ -62,7 +88,7 @@ export default {
           alert('Login effettuato con successo');
         } else {
           alert(data.msg);
-        }
+        }*/
 
       } catch (error) {
         console.error('Errore durante il login:', error);
