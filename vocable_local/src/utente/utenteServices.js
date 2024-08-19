@@ -1,8 +1,6 @@
 const utenteModel = require('./utenteModel');
 const jwt = require('jsonwebtoken');
 const encryptor = require('simple-encryptor')('hqBzkw4H7Iog6561'); // chiave per criptare le password
-//const cookieParser = require("cookie-parser");
-//app.use(cookieParser());
 
 // Funzione per la creazione di un nuovo utente
 module.exports.createUtenteDBService = (utenteDetails) => {
@@ -11,13 +9,13 @@ module.exports.createUtenteDBService = (utenteDetails) => {
             if (error) {
                 reject({ status: false, msg: "Errore durante la verifica dell'email" });
             } else if (existingUser) {
-                reject({ status: false, msg: "Email già in uso" }); // Email già presente nel sistema
+                reject({ status: false, msg: "Email già in uso" });
             } else {
                 const utenteModelData = new utenteModel();
                 utenteModelData.email = utenteDetails.email;
                 utenteModelData.nickname = utenteDetails.nickname;
 
-                const encryptedPassword = encryptor.encrypt(utenteDetails.password); // cripta la password
+                const encryptedPassword = encryptor.encrypt(utenteDetails.password);
                 utenteModelData.password = encryptedPassword;
 
                 utenteModelData.save(function resultHandle(error, result) {
@@ -42,19 +40,15 @@ module.exports.loginUtenteDBService = (utenteDetails) => {
                 if (result) {
                     const decryptedPassword = encryptor.decrypt(result.password);
                     if (decryptedPassword === utenteDetails.password) {
-                        // Creazione del token JWT
                         const payload = { email: result.email, id: result._id };
-                        const options = { expiresIn: '6h' }; // Durata del token
-                        const token = jwt.sign(payload, 'balls'/*process.env.JWT_SECRET*/, options); // Sostituire 'secret' con una chiave sicura
-                        console.log('Generated Token:', token); // Log del token generato
-                        console.log('JWT Secret:', 'balls' /*process.env.JWT_SECRET*/); // Log della chiave segreta
+                        const options = { expiresIn: '6h' };
+                        const token = jwt.sign(payload, 'balls' /*process.env.JWT_SECRET*/, options);
                         const body = { 
                             status: true, 
                             msg: "Utente validato con successo", 
                             token: token, 
                             id: result._id 
                         };
-                        console.log(body);
                         resolve(body);
                     } else {
                         reject({ status: false, msg: "Password errata" ,token : '0',id: '0'});
@@ -67,4 +61,15 @@ module.exports.loginUtenteDBService = (utenteDetails) => {
     });
 }
 
-
+// Nuova funzione per trovare un utente per email
+module.exports.findUserByEmail = (email) => {
+    return new Promise((resolve, reject) => {
+        utenteModel.findOne({ email: email }, (err, user) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(user);
+            }
+        });
+    });
+}

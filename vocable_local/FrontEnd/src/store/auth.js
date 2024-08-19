@@ -1,4 +1,4 @@
-import axios from 'axios';
+ import axios from 'axios';
 
 export default{
     namespaced: true,
@@ -27,22 +27,13 @@ export default{
 
     actions:{
         async signIn({dispatch},credentials){
-            const response = await fetch('/api/utente/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    email: credentials.email,
-                    password: credentials.password
-                })
-            });
-            const data = await response.json();
-            dispatch('attempt',data.token)
-            console.log(data.token)
+            let response = await axios.post('/api/utente/login', credentials)
+            dispatch('attempt',response.data.token)
         },
         async attempt({commit},token){
             commit('SET_TOKEN',token)
             try{
-                let response = await axios.get('auth/me',{
+                let response = await axios.get('/api/utente/me',{
                     headers:{
                         'Authorization':'Bearer ' + token
                     }

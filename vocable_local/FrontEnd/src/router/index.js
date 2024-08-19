@@ -1,27 +1,3 @@
-/*import UserStats from './components/UserStats'
-import Home from './components/Home'
-import { createRouter, createWebHistory} from 'vue-router'
-
-const routes= [
-    {
-        name: 'Home',
-        component: Home,
-        path:'/'
-    },
-    {
-        name: 'UserStats',
-        component: UserStats,
-        path:'/UserStats'
-    }
-];
-
-const router = createRouter({
-    history:createWebHistory(),
-    routes,
-});
-
-export default router;*/
-
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../components/Home.vue'
 import About from '../components/About.vue'

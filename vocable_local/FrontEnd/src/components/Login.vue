@@ -18,7 +18,15 @@
         </v-form>
         <v-btn :disabled="!isFormValid" @click.native="onLogin" color="blue" size="large" variant="elevated"
           block>Login</v-btn>
+          <span>
+          <v-card-text class="black--text mt-8">
+            <h3 class="text-center">Non hai ancora un profilo?</h3>
+            <router-link to="/registration" id="registerButton"
+              class=" font-semibold whitespace-nowrap  text-blue-700 ">Registrati</router-link>
+          </v-card-text>
+        </span>
       </v-card>
+      
     </v-sheet>
   </div>
 </template>
