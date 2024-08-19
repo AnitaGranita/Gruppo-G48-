@@ -5,11 +5,6 @@
         <img src="/logoVuoto.png" alt="Vocable Logo" />
         <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Vocable</span>
 
-        <!-- Mostra un messaggio di benvenuto se l'utente è autenticato -->
-        <div v-if="authenticated" class="welcome-message">
-          <p>Benvenuto, {{ user.name }}!</p>
-        </div>
-
         <v-form v-model="isFormValid" lazy-validation @submit.prevent="onLogin">
           <v-text-field class="required" type="email" :rules="emailRules" v-model="email" label="Email"
             variant="underlined"></v-text-field>
@@ -18,7 +13,7 @@
         </v-form>
         <v-btn :disabled="!isFormValid" @click.native="onLogin" color="blue" size="large" variant="elevated"
           block>Login</v-btn>
-          <span>
+        <span>
           <v-card-text class="black--text mt-8">
             <h3 class="text-center">Non hai ancora un profilo?</h3>
             <router-link to="/registration" id="registerButton"
@@ -26,7 +21,7 @@
           </v-card-text>
         </span>
       </v-card>
-      
+
     </v-sheet>
   </div>
 </template>
@@ -56,10 +51,10 @@ export default {
       ]
     };
   },
-  computed:{
+  computed: {
     ...mapGetters({
       authenticated: 'auth/authenticated',
-      user : 'auth/user'
+      user: 'auth/user'
     })
   },
   methods: {
@@ -76,27 +71,8 @@ export default {
           password: this.password
         }
 
-        this.signIn(credentials);
-
-        /*const response = await fetch('/api/utente/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email: this.email,
-            password: this.password
-          })
-        });
-
-        const data = await response.json();
-        console.log('Response Data:', data); // Verifica se il token è presente in `data`
-        if (data.status) {
-          localStorage.setItem('token', data.token); // Assicurati che `data.token` sia definito
-          axios.defaults.headers.common['Authorization'] = 'Bearer ' + data.token;
-          console.log('Token:', data.token);
-          alert('Login effettuato con successo');
-        } else {
-          alert(data.msg);
-        }*/
+        await this.signIn(credentials);
+        this.$router.replace({ name: 'userstats' });
 
       } catch (error) {
         console.error('Errore durante il login:', error);

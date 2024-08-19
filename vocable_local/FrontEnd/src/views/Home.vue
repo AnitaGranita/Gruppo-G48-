@@ -7,7 +7,6 @@
         <span class="vocableText">Vocable</span>
         <div class="descrizione">
             <span class="desc">Cerca di indovinare tutte le parole tramite le loro definizioni!</span>
-            <span class="desc">E tu? Sei prontə a provarci?</span>
         </div>
         <a href="Gameplay" class="button">Let's Play!</a>
     </div>

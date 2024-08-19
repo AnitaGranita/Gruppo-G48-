@@ -1,8 +1,8 @@
 <script setup>
 import { stringifyQuery } from 'vue-router';
-import SimpleKeyboard from './SimpleKeyboard.vue';
-import WordRow from './WordRow.vue';
-import {getRandomWord, words} from './Words.vue';
+import SimpleKeyboard from '../components/SimpleKeyboard.vue';
+import WordRow from '../components/WordRow.vue';
+import {getRandomWord, words} from '../components/Words.vue';
 import { reactive, onMounted, computed, ref } from 'vue';
 
 const state = reactive({

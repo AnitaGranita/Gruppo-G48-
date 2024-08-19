@@ -3,7 +3,7 @@ import auth from "./auth";
 
 const store = createStore({
     state:{
-
+        
     },
     mutations:{
 
