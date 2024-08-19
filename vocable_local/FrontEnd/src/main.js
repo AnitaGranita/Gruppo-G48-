@@ -1,13 +1,13 @@
+// src/main.js
+
 import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
 import store from './store';
 import axios from 'axios';
-import './store/subscriber';  // Importa subscriber.js per assicurarti che venga eseguito
+import './store/subscriber';
 
 import '../node_modules/flowbite-vue/dist/index.css';
-
-// Vuetify
 import 'vuetify/styles';
 import { createVuetify } from 'vuetify';
 import * as components from 'vuetify/components';
@@ -20,10 +20,23 @@ const vuetify = createVuetify({
 
 const app = createApp(App);
 
-// Usa i plugin in questo ordine
-app.use(store);  // Assicurati che lo store sia registrato prima degli altri
-app.use(router); // Registra il router
-app.use(vuetify); // Registra Vuetify
-app.use(axios);
+// Configura la promessa per il recupero del token e il tentativo di autenticazione
+const initializeAuth = async () => {
+    const token = localStorage.getItem('Token');
+    if (token) {
+        try {
+            await store.dispatch('auth/attempt', token);
+        } catch (error) {
+            console.error('Autenticazione fallita:', error);
+        }
+    }
+};
 
-app.mount('#app');
+// Inizializza l'autenticazione prima di montare l'app
+initializeAuth().then(() => {
+    app.use(store);
+    app.use(router);
+    app.use(vuetify);
+    app.use(axios);
+    app.mount('#app');
+});

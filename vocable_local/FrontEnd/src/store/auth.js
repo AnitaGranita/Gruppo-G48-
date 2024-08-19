@@ -30,8 +30,14 @@ export default{
             let response = await axios.post('/api/utente/login', credentials)
             return dispatch('attempt',response.data.token)
         },
-        async attempt({commit},token){
-            commit('SET_TOKEN',token)
+        async attempt({ commit, state }, token) {  
+            if (token) {
+                commit('SET_TOKEN', token);
+            }
+    
+            if (!state.token) { 
+                return;
+            }
             try{
                 let response = await axios.get('/api/utente/me')/*,{
                     headers:{
@@ -51,6 +57,10 @@ export default{
                 commit('SET_USER',null)
                 console.log('Salvataggio del token non riuscito')
             }
+        },
+
+        signOut({commit}){
+            
         }
     }
 }
