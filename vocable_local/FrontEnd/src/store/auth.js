@@ -28,16 +28,16 @@ export default{
     actions:{
         async signIn({dispatch},credentials){
             let response = await axios.post('/api/utente/login', credentials)
-            dispatch('attempt',response.data.token)
+            return dispatch('attempt',response.data.token)
         },
         async attempt({commit},token){
             commit('SET_TOKEN',token)
             try{
-                let response = await axios.get('/api/utente/me',{
+                let response = await axios.get('/api/utente/me')/*,{
                     headers:{
                         'Authorization':'Bearer ' + token
                     }
-                })
+                })*/
                 commit('SET_USER', response.data)
                 if (response.data) {
                     commit('SET_USER', response.data);

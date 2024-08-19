@@ -1,20 +1,20 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../components/Home.vue'
-import About from '../components/About.vue'
-import Gameplay from '../components/Gameplay.vue'
-import UserStats from '../components/UserStats.vue'
-import Login from '../components/Login.vue'
-import RegistrationPietro from'../components/RegistrationPietro.vue'
-import RegistrationComplete from '@/components/RegistrationComplete.vue'
+import Home from '../views/Home.vue'
+import About from '../views/About.vue'
+import Gameplay from '../views/Gameplay.vue'
+import UserStats from '../views/UserStats.vue'
+import Login from '../views/Login.vue'
+import RegistrationPietro from '../views/RegistrationPietro.vue'
+import RegistrationComplete from '@/views/RegistrationComplete.vue'
 
 const routes = [
-  { path: '/', component: Home },
-  { path: '/about', component: About },
-  { path: '/gameplay', component: Gameplay},
-  { path: '/login', component: Login},
-  { path: '/user-stats', component: UserStats},
-  { path: '/registration', component: RegistrationPietro},
-  { path: '/registrationcomplete', component:RegistrationComplete}
+  { path: '/', component: Home, name: 'home' },
+  { path: '/about', component: About, name: 'about' },
+  { path: '/gameplay', component: Gameplay, name: 'gameplay'  },
+  { path: '/login', component: Login, name: 'login'  },
+  { path: '/user-stats', component: UserStats, name: 'userstats',  meta: { requiresAuth: true } },
+  { path: '/registration', component: RegistrationPietro, name: 'registration'  },
+  { path: '/registrationcomplete', component: RegistrationComplete, name: 'registrationcomplete'  }
 ]
 
 const router = createRouter({
