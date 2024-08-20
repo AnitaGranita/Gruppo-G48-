@@ -9,7 +9,7 @@ const props = defineProps({ //definiamo i props dell'applicazione WordRow
     submitted: Boolean, //submitted: se la guess è stata inviata
 });
 
-const colors = ref(["", "", "", "", "", "", ""]); //"template" che definisce quante caselle verrano colorate
+const colors = ref(["", "", "", "", "", "", "", ""]); //"template" che definisce quante caselle verrano colorate
 
 watch( //metodo di vue
     ()=>props.submitted, //se l'utente "submitta" una guess, il metodo funziona 
@@ -18,7 +18,7 @@ watch( //metodo di vue
             let s = props.solution;
             let v = props.value;
 
-            let temp = ["gray", "gray", "gray", "gray", "gray", "gray", "gray" ]; //Temp è l'array temporaneo dei colori
+            let temp = ["gray", "gray", "gray", "gray", "gray", "gray", "gray", "gray" ]; //Temp è l'array temporaneo dei colori
             let letterPool = []; //letterPool è l'array dove verranno salvate le lettere della soluzione non verdi
             for (let i = 0; i < props.solution.length; i++) { // con questo for  scorriamo la guess con la soluzione
                 if (s.charAt(i)==v.charAt(i)) {

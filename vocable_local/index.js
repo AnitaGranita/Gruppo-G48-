@@ -7,7 +7,7 @@ const cors = require('cors')
 require('dotenv').config()
 
 app.use(cors({
-    origin: "http://localho.st:8080"
+    origin: "http://localhost:8080"
 }));
 
 
@@ -21,7 +21,7 @@ app.listen(9992, function check(err)
 });
 
 
-mongoose.connect("mongodb://localho.st:27017/utenti", //NB: "utenti" è il nome del db, senza niente crea il db di "test"
+mongoose.connect("mongodb://localhost:27017/utenti", //NB: "utenti" è il nome del db, senza niente crea il db di "test"
     {
         useNewUrlParser:true,
         useUnifiedTopology: true

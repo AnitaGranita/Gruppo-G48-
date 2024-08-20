@@ -25,9 +25,9 @@ const lostGame = computed(()=> !wonGame.value //valore che ti dice se hai perso
   && state.currentGuessIndex >= 6
 );
 
-function startGame() {
-
-}
+const refreshPage = () => {
+      window.location.reload(); // Ricarica la pagina corrente
+    }
 
 const handleInput = (key) => {  //funzione che gestisce gl'input della tastiera
   //console.log(key);
@@ -122,4 +122,30 @@ onMounted(() =>{
     :guessedLetters="state.guessedLetters"
     />
   </div>
+  <div>
+    <button 
+      v-if="wonGame||lostGame"
+      @click="refreshPage" 
+      class="refresh-button">
+      Prossima parola
+    </button>
+  </div>
 </template>
+
+<style scoped>
+.refresh-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  background-color: #1a56db;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.refresh-button:hover {
+  background-color: #1445ae;
+}
+</style>
