@@ -8,16 +8,15 @@ store.subscribe((mutation, state) => {
         case 'auth/SET_TOKEN':
             console.log('Processing SET_TOKEN mutation');
             if (mutation.payload) {
+                // Salva il token
                 axios.defaults.headers.common['Authorization'] = `Bearer ${mutation.payload}`;
                 localStorage.setItem('Token', mutation.payload);
-                console.log('Token saved:', mutation.payload);
-                localStorage.setItem('TestKey', 'TestValue');
-                console.log('TestKey value:', localStorage.getItem('TestKey')); // Dovrebbe stampare 'TestValue'
-                localStorage.removeItem('TestKey');
-                console.log('TestKey value after removal:', localStorage.getItem('TestKey')); // Dovrebbe stampare null
+                console.log('Token saved in localStorage:', mutation.payload);
             } else {
+                // Rimuovi il token
                 delete axios.defaults.headers.common['Authorization'];
                 localStorage.removeItem('Token');
+                console.log('Token removed from localStorage');
             }
             break;
     }

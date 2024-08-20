@@ -59,8 +59,15 @@ export default{
             }
         },
 
-        signOut({commit}){
-            
+        async signOut({ commit }) {
+            try {
+                await axios.post('/api/utente/logout');
+            } catch (error) {
+                console.error('Logout failed:', error);
+            }
+            commit('SET_TOKEN', null); // Rimuovi il token dallo store
+            commit('SET_USER', null); // Resetta i dati utente
         }
+        
     }
 }

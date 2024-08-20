@@ -1,5 +1,3 @@
-
-
 <template>
   <div>
     <h3>Ciao, {{user.nickname}}!</h3>

@@ -73,3 +73,13 @@ module.exports.findUserByEmail = (email) => {
         });
     });
 }
+
+// Funzione di logout (semplice, lato client)
+module.exports.logoutUtente = (req, res) => {
+    // Invia una risposta di successo
+    res.status(200).send({
+        status: true,
+        msg: "Logout avvenuto con successo"
+    });
+};
+

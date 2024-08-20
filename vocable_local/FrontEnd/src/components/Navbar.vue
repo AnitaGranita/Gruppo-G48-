@@ -42,14 +42,21 @@
               class="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">About
               Us</router-link>
           </li>
-          <li v-if="authenticated">
-            <router-link to="/user-stats"
-              class="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Statistiche</router-link>
-          </li>
-          <li v-else="!authenticated">
-            <router-link to="/login"
-              class="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Accedi</router-link>
-          </li>
+          <template v-if="authenticated">
+            <li>
+              <router-link to="/user-stats"
+                class="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Statistiche</router-link>
+            </li>
+            <li>
+              <a href="#" @click.prevent="signOut"  class="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Logout</a>
+            </li>
+          </template>
+          <template v-else="!authenticated">
+            <li>
+              <router-link to="/login"
+                class="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Accedi</router-link>
+            </li>
+          </template>
         </ul>
       </div>
     </div>
@@ -61,16 +68,27 @@
 <script setup>
 import { onMounted, computed } from 'vue'
 import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 import { initFlowbite } from 'flowbite'
 
+// Inizializza store e router
 const store = useStore()
+const router = useRouter()
 
-// Computed properties for Vuex getters
+// Computed per verificare se l'utente è autenticato e ottenere i dati dell'utente
 const authenticated = computed(() => store.getters['auth/authenticated'])
 const user = computed(() => store.getters['auth/user'])
 
+// Funzione per la disconnessione dell'utente
+async function signOut() {
+  await store.dispatch('auth/signOut')
+  router.replace({ name: 'home' }) 
+}
+
+// Inizializza Flowbite quando il componente è montato
 onMounted(() => {
   initFlowbite()
 })
 
 </script>
+
