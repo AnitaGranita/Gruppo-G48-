@@ -58,4 +58,25 @@ var meUtenteControllerFn = async (req, res) => {
     }
 }
 
-module.exports = { createUtenteControllerFn, loginUtenteControllerFn, meUtenteControllerFn };
+var logoutUtenteControllerFn = async (req, res) => {
+    try {
+        // Se hai bisogno di eseguire logiche specifiche per il logout, falle qui
+        // Ad esempio, invalidare il token nel database (se usi un sistema di blacklist)
+
+        // Per il logout lato client, il token di sessione può essere eliminato semplicemente
+        // Non è necessario fare nulla sul server se utilizzi solo JWT
+        res.status(200).send({
+            status: true,
+            message: "Logout avvenuto con successo"
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            status: false,
+            message: "Errore durante il logout"
+        });
+    }
+}
+
+
+module.exports = { createUtenteControllerFn, loginUtenteControllerFn, meUtenteControllerFn, logoutUtenteControllerFn  };

@@ -9,7 +9,7 @@ router.route('/utente/login').post(utenteController.loginUtenteControllerFn);
 router.route('/utente/create').post(utenteController.createUtenteControllerFn);
 router.route('/utente/createstats').post(utentestatsController.createUtentestatsControllerFn);
 router.route('/utente/me').get(authenticateToken, utenteController.meUtenteControllerFn); 
-outer.route('/utente/logout').post(authenticateToken, utenteController.logoutUtenteControllerFn);
+router.route('/utente/logout').post(authenticateToken, utenteController.logoutUtenteControllerFn);
 
 
-module.exports = router;
+module.exports = router; 
