@@ -113,7 +113,10 @@ onMounted(() =>{
       Out of tries. :(
     </p>
     <p class="text-center">
-      Definition: {{ state.solution.definition }}
+      <span>
+        <p class="rounded font-semibold text-blue-700">Definizione:</p>
+        <p class="rounded font-medium font-italic text-black"> {{ state.solution.definition }}</p>
+      </span>
     </p>
     <simple-keyboard @onKeyPress="handleInput"
     :guessedLetters="state.guessedLetters"

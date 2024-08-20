@@ -5,7 +5,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
   </head>
 
-  <nav class="border-gray-200 bg-blue-200 dark:bg-gray-800 dark:border-gray-700">
+  <nav class="border-blue-700 bg-blue-200 dark:bg-gray-800 dark:border-gray-700">
     <!--logo con scritta di fianco-->
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-2">
       <router-link to="/" class="flex items-center space-x-3 rtl:space-x-reverse">
