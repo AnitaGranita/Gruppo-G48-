@@ -1,88 +1,119 @@
 <template>
-    <div class="wrapper">
-        <v-sheet>
-            <v-card class="mx-auto px-6 py-8" max-width="344">
-                <img src="/logoVuoto.png" alt="Vocable Logo" /> <!-- logo , scritta qua sotto -->
-                <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Vocable</span>
+  <div class="wrapper">
+    <v-sheet>
+      <v-card class="mx-auto px-6 py-8" max-width="344">
+        <img src="/logoVuoto.png" alt="Vocable Logo" />
+        <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Vocable</span>
 
-                <v-form v-model="isFormValid" lazy-validation @submit.prevent="onRegistrati">
-                    <v-text-field class="required" type="nickname":rules="nicknameRules" v-model="nickname" label="Nickname" variant="underlined"></v-text-field>
-                    <v-text-field class="required" type="email":rules="emailRules" v-model="email" label="Email" variant="underlined"></v-text-field>
-                    <v-text-field class="required" type="password":rules="passwordRules" v-model="password" label="Password" variant="underlined"></v-text-field>
-                </v-form>
-                <v-btn :disabled="!isFormValid" @click.native="onRegistrati" color="blue" size="large" variant="elevated" block>Registrati</v-btn>
+        <v-form v-model="isFormValid" lazy-validation @submit.prevent="onRegistrati">
+          <v-text-field class="required" type="nickname" :rules="nicknameRules" v-model="nickname" label="Nickname"
+            variant="underlined"></v-text-field>
+          <v-text-field class="required" type="email" :rules="emailRules" v-model="email" label="Email"
+            variant="underlined"></v-text-field>
+          <v-text-field class="required" type="password" :rules="passwordRules" v-model="password" label="Password"
+            variant="underlined"></v-text-field>
+        </v-form>
 
-            </v-card>
-        </v-sheet>
-    </div>
+        <!-- Alert per l'errore -->
+        <v-alert v-if="currentEmailError" type="error" dismissible>
+          {{ currentEmailError }}
+        </v-alert>
+
+        <v-btn :disabled="!isFormValid" @click.native="onRegistrati" color="blue" size="large" variant="elevated" block>
+          Registrati
+        </v-btn>
+      </v-card>
+    </v-sheet>
+  </div>
 </template>
 
-
-
 <script>
-import axios from "axios";
-export default{
-    data:() =>
-    ({
-      isFormValid:false, //in automatico vuetify controlla le rules e mette true e false
-      //i dati possono essere inviati solo se isFormValid viene settato a true da vuetify
+import { mapState, mapActions } from 'vuex';
+
+export default {
+  data() {
+    return {
+      isFormValid: false,
       email: '',
-      password:'',
+      password: '',
       nickname: '',
-      loading: false, //quando sta caricando i dati, non possono essere modificati
-      //le regole definiscono dei requisiti da superare per poter mandare i dati al server
-      //se una regola non è rispettata, viene dato un messaggio
-      //il messaggio restituito corrisponde alla regola che viene prima tra le non rispettate
-      nicknameRules:[ //l'username deve essere non vuoto e avere almeno 3 caratteri
+      loading: false,
+      nicknameRules: [
         v => !!v || 'Obbligatorio',
-        v => v && v.length>=3 || 'Username troppo corto, almeno 3 caratteri'
+        v => v.length >= 3 || 'Username troppo corto, almeno 3 caratteri',
       ],
-      passwordRules:[ //la password deve essere non vuota e di almeno 3 caratteri
+      passwordRules: [
         v => !!v || 'Obbligatorio',
-        v => v && v.length>=6 || 'Password troppo corta, almeno 6 caratteri'
+        v => v.length >= 6 || 'Password troppo corta, almeno 6 caratteri',
       ],
-      emailRules:[ //la email deve essere non vuota e valida, controlla che sia valida solo se la lunghezza è più di zero
-        v =>!!v || 'Obbligatorio',
-        v =>v && /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'Email non valida'
-      ]
-    }),
-    methods:{
-      
-      onRegistrati(){
-        axios.post(
-          '/api/utente/create',
-          {
-            email:this.email,
-            password:this.password,
-            nickname:this.nickname
-          }).then((response)=>
-           {
-            axios.post(
-          '/api/utente/createstats',
-          {
-            email:this.email,
+      emailRules: [
+        v => !!v || 'Obbligatorio',
+        v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'Email non valida',
+      ],
+    };
+  },
+
+  computed: {
+    ...mapState('email', ['emailError']),
+    currentEmailError() {
+      console.log('Stato corrente di emailError:', this.emailError);
+      return this.emailError;
+    }
+  },
+
+  methods: {
+    ...mapActions('email', ['setEmailError', 'clearEmailError']),
+    ...mapActions('email', ['register']),
+
+    async onRegistrati() {
+      this.loading = true;
+
+      try {
+        // Pulisci eventuali errori precedenti
+        this.clearEmailError();
+
+        // Effettua la chiamata al modulo email per la registrazione
+        const response = await this.register({
+          email: this.email,
+          password: this.password,
+          nickname: this.nickname
+        });
+
+        if (response.status) {
+          await axios.post('/api/utente/createstats', {
+            email: this.email,
             gameswon: 0,
             gameslost: 0,
             totalgames: 0,
-            won1 : 0,
-            won2 : 0,
-            won3 : 0,
-            won4 : 0,
-            won5 : 0,
-            won6 : 0,
-          }).then((response)=>
-        {location.href = '../registrationcomplete';
-        })
-        if(!response) location.href = '../home';
-            console.log(response)
-          })
-          if(!response) alert('errore di registrazione');
-    },
-  },
-}
+            won1: 0,
+            won2: 0,
+            won3: 0,
+            won4: 0,
+            won5: 0,
+            won6: 0,
+          });
+          this.$router.replace({ name: 'registrationcomplete' });
+        } else {
+          console.log(response.message);
+          if (response.message === 'Email già in uso') {
+            console.log('Errore email già in uso rilevato');
+            this.setEmailError('Email già in uso');
+          } else {
+            console.log('Errore generico durante la registrazione');
+            this.setEmailError('Errore durante la registrazione');
+          }
+        }
+      } catch (error) {
+        console.log('Errore durante la registrazione:', error);
+        this.setEmailError('Errore durante la registrazione');
+      } finally {
+        this.loading = false;
+      }
+    }
+  }
+};
+
 </script>
-
-
 
 <style scoped>
 .wrapper {

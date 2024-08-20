@@ -9,15 +9,17 @@ var createUtenteControllerFn = async (req, res) => {
         var status = await utenteService.createUtenteDBService(req.body);
         console.log(status);
 
-        if (status) {
-            res.send({ "status": true, "message": "Utente creato con successo" }); 
+        if (status && status.status === true) {
+            res.send({ "status": true, "message": "Utente creato con successo" });
         } else {
-            res.send({ "status": false, "message": "Errore: Impossibile creare l'utente"});
+            res.send({ "status": false, "message": status.msg || "Errore: Impossibile creare l'utente" });
         }
     } catch(err) {
         console.log(err);
+        res.send({ "status": false, "message": "Errore: Impossibile completare la richiesta" });
     }
 }
+
 
 var loginUtenteControllerFn = async (req, res) => {
     var result = null;

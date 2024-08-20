@@ -19,5 +19,12 @@ store.subscribe((mutation, state) => {
                 console.log('Token removed from localStorage');
             }
             break;
+            case 'email/SET_EMAIL_ERROR':
+                console.log('Email error set:', mutation.payload);
+                break;
+    
+            case 'email/CLEAR_EMAIL_ERROR':
+                console.log('Email error cleared');
+                break;
     }
 });
