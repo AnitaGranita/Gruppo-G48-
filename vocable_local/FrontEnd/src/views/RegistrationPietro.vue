@@ -29,6 +29,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
+import axios from 'axios';
 
 export default {
   data() {
@@ -79,7 +80,7 @@ export default {
           nickname: this.nickname
         });
 
-        if (response.status) {
+        if (response.data.status) {
           await axios.post('/api/utente/createstats', {
             email: this.email,
             gameswon: 0,
