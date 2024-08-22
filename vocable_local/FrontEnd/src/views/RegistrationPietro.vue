@@ -94,19 +94,9 @@ export default {
             won6: 0,
           });
           this.$router.replace({ name: 'registrationcomplete' });
-        } else {
-          console.log(response.message);
-          if (response.message === 'Email già in uso') {
-            console.log('Errore email già in uso rilevato');
-            this.setEmailError('Email già in uso');
-          } else {
-            console.log('Errore generico durante la registrazione');
-            this.setEmailError('Errore durante la registrazione');
-          }
-        }
+        } 
       } catch (error) {
         console.log('Errore durante la registrazione:', error);
-        this.setEmailError('Errore durante la registrazione');
       } finally {
         this.loading = false;
       }

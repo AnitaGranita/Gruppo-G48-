@@ -16,7 +16,8 @@ var createUtenteControllerFn = async (req, res) => {
         }
     } catch(err) {
         console.log(err);
-        res.send({ "status": false, "message": "Errore: Impossibile completare la richiesta" });
+        res.send({"status":false,"message":err.msg});
+        //res.send({ "status": false, "message": "Errore: Impossibile completare la richiesta" });
     }
 }
 
