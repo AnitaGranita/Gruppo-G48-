@@ -7,15 +7,17 @@ import Login from '../views/Login.vue'
 import RegistrationPietro from '../views/RegistrationPietro.vue'
 import RegistrationComplete from '@/views/RegistrationComplete.vue'
 import store from '@/store'
+import ForgotPassword from '@/views/ForgotPassword.vue'
 
 const routes = [
   { path: '/', component: Home, name: 'home' },
   { path: '/about', component: About, name: 'about' },
-  { path: '/gameplay', component: Gameplay, name: 'gameplay'  },
-  { path: '/login', component: Login, name: 'login'  },
-  { path: '/user-stats', component: UserStats, name: 'userstats', 
-    beforeEnter:(to, from, next)=>{
-      if(!store.getters['auth/authenticated']){
+  { path: '/gameplay', component: Gameplay, name: 'gameplay' },
+  { path: '/login', component: Login, name: 'login' },
+  {
+    path: '/user-stats', component: UserStats, name: 'userstats',
+    beforeEnter: (to, from, next) => {
+      if (!store.getters['auth/authenticated']) {
         return next({
           name: 'login'
         })
@@ -23,8 +25,9 @@ const routes = [
       next()
     }
   },
-  { path: '/registration', component: RegistrationPietro, name: 'registration'  },
-  { path: '/registrationcomplete', component: RegistrationComplete, name: 'registrationcomplete'  }
+  { path: '/registration', component: RegistrationPietro, name: 'registration' },
+  { path: '/registrationcomplete', component: RegistrationComplete, name: 'registrationcomplete' },
+  { path: '/forgot-password', component: ForgotPassword, name: 'forgotpassword' }
 ]
 
 const router = createRouter({
