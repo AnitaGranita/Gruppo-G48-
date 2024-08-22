@@ -32,6 +32,7 @@ export default {
                     console.log('Registrazione avvenuta con successo:', response.data);
                     // Puoi anche considerare di reimpostare l'errore se la registrazione ha successo
                     commit('CLEAR_EMAIL_ERROR');
+                    return response;
                 } else {
                     // Gestisci l'errore specifico dal server
                     console.log('Errore di registrazione:', response.data.message);
