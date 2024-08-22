@@ -22,5 +22,24 @@ var createUtentestatsControllerFn = async (req, res) => //request, response
     }
 }
 
-module.exports = {createUtentestatsControllerFn};
+var statGetterControllerFn = async (req, res) => {
+    try {
+        const stats = await utentestatsServices.findStatsByEmail(req.user.email);
+
+        if (!stats) {
+            return res.status(404).json({ msg: 'statistiche irreperibili' });
+        }
+
+        // Restituisci i dettagli dell'utente
+        console.log('retrieval avvenuto con successo')
+        res.json({
+            email: stats.email,
+            totalgames: stats.totalgames,
+        });
+    } catch (error) {
+        res.status(500).json({ msg: 'Errore del server' });
+    }
+}
+
+module.exports = {createUtentestatsControllerFn, statGetterControllerFn};
 //esporta le "funzioni" createUtenteControllerFN e loginUtenteControllerFN per darle a routes

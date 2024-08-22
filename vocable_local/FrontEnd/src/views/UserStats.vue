@@ -3,11 +3,18 @@
     <h3>Ciao, {{user.nickname}}!</h3>
     <linechart/>
   </div>
+    <div>
+    <button @click= "onLogin">
+      
+      tipregofunziona
+    </button>
+  </div>
 </template>
-
 <script>
 import { mapGetters } from 'vuex'
 import linechart from '../components/LineChart.vue'
+import axios from 'axios'
+
 
 export default {
   components: {
@@ -19,6 +26,12 @@ export default {
       user: 'auth/user'
     })
   },
+  methods: {
+      async onLogin() {
+        await axios.post('/api/utente/getter')
+    }
+  }
+  
 }
 </script>
 

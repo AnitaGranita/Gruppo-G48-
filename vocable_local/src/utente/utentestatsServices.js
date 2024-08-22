@@ -34,3 +34,15 @@ module.exports.createUtentestatsDBService = (utentestatsDetails) => {
         }}
     )});
 }
+
+module.exports.findStatsByEmail = (email) => {
+    return new Promise((resolve, reject) => {
+        utentestatsModel.findOne({ email: email }, (err, stats) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(stats);
+            }
+        });
+    });
+}
