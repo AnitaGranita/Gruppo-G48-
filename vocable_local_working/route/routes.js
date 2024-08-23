@@ -10,7 +10,7 @@ router.route('/utente/create').post(utenteController.createUtenteControllerFn);
 router.route('/utente/createstats').post(utentestatsController.createUtentestatsControllerFn);
 router.route('/utente/me').get(authenticateToken, utenteController.meUtenteControllerFn); 
 router.route('/utente/logout').post(authenticateToken, utenteController.logoutUtenteControllerFn);
-router.route('/utente/getter').post(authenticateToken, utentestatsController.statGetterControllerFn);
+router.route('/utente/getter').get(utentestatsController.statGetterControllerFn);
 
 
 module.exports = router; 

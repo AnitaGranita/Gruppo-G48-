@@ -1,6 +1,10 @@
 <template>
   <div class="wrapper">
     <v-sheet>
+      <template v-slot:loader="{ isActive }">
+        <v-progress-linear :active="isActive" color="deep-purple" height="4" indeterminate></v-progress-linear>
+      </template>
+
       <v-card class="mx-auto px-6 py-8" max-width="344">
         <img src="/logoVuoto.png" alt="Vocable Logo" />
         <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Vocable</span>
@@ -13,11 +17,12 @@
         </v-form>
         <v-btn :disabled="!isFormValid" @click.native="onLogin" color="blue" size="large" variant="elevated"
           block>Login</v-btn>
-          <v-card-text> <router-link to="/forgot-password" class="justify-end d-flex text-blue">Dimenticato la password?</router-link></v-card-text>
+        <v-card-text> <router-link to="/forgot-password" class="justify-end d-flex text-blue">Dimenticato la
+            password?</router-link></v-card-text>
         <span>
           <v-card-text class="black--text ">
             <h3 class="text-center">Non hai ancora un profilo?</h3>
-            <router-link to="/registration" id="registerButton"
+            <router-link to="/registration" id="registerButton" @click="reserve"
               class=" font-semibold whitespace-nowrap  text-blue-700 ">Registrati</router-link>
           </v-card-text>
         </span>
@@ -37,6 +42,7 @@ export default {
   namespaced: true,
   data() {
     return {
+      selection: 1,
       isFormValid: false,
       email: '',
       password: '',
@@ -58,6 +64,11 @@ export default {
     })
   },
   methods: {
+    reserve () {
+        this.loading = true
+
+        setTimeout(() => (this.loading = false), 2000)
+      },
     ...mapActions({
       signIn: 'auth/signIn'
     }),

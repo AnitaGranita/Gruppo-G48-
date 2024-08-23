@@ -8,6 +8,7 @@ import RegistrationPietro from '../views/RegistrationPietro.vue'
 import RegistrationComplete from '@/views/RegistrationComplete.vue'
 import store from '@/store'
 import ForgotPassword from '@/views/ForgotPassword.vue'
+import ResetPassword from '@/views/ResetPassword.vue'; 
 
 const routes = [
   { path: '/', component: Home, name: 'home' },
@@ -27,7 +28,13 @@ const routes = [
   },
   { path: '/registration', component: RegistrationPietro, name: 'registration' },
   { path: '/registrationcomplete', component: RegistrationComplete, name: 'registrationcomplete' },
-  { path: '/forgot-password', component: ForgotPassword, name: 'forgotpassword' }
+  { path: '/forgot-password', component: ForgotPassword, name: 'forgotpassword' },
+  {
+    path: '/reset-password/:token',
+    name: 'ResetPassword',
+    component: ResetPassword,
+    props: true // Permette di passare i parametri della route come props
+  }
 ]
 
 const router = createRouter({

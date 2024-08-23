@@ -1,13 +1,14 @@
 <template>
     <div class="wrapper">
         <v-sheet>
-            <v-card class="mx-auto px-6 py-8" max-width="344">
+            <v-card class="mx-auto px-6 py-8 w-33 mt-12">
                 <img src="/logoVuoto.png" alt="Vocable Logo" /> <!-- logo , scritta qua sotto -->
-                <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Vocable</span>
+                <v-card-text class="text-center text-2xl font-semibold whitespace-nowrap dark:text-white"> Vocable</v-card-text>
                 <div class="descrizione">
-                  <span class="desc">Registrazione compiuta con successo!</span>
+                  <v-card-text class="desc text-h6">Registrazione compiuta con successo!</v-card-text>
+                  <v-card-text class="desc text-h6 font-semibold text-blue-700">Accedi per salvare le statistiche:</v-card-text>
                 </div>
-                <a href="Gameplay" class="button">Let's Play!</a>
+                <a href="Login" class="button">Accedi</a>
             </v-card>
         </v-sheet>
     </div>

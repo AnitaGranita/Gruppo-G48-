@@ -7,8 +7,10 @@ const cors = require('cors')
 require('dotenv').config()
 
 app.use(cors({
-    origin: "http://localhost:8080"
-}));
+    origin: 'http://localhost:5173', 
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], 
+    allowedHeaders: ['Content-Type', 'Authorization'] 
+}));;
 
 
 app.listen(9992, function check(err)
@@ -16,7 +18,7 @@ app.listen(9992, function check(err)
     if(err){
         console.log("Errore connessione al server");
     }else{
-        console.log("Server in ascolto");
+        console.log("Server in ascolto sulla porta 9992");
     }
 });
 
