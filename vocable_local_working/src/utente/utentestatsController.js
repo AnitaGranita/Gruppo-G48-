@@ -25,21 +25,52 @@ var createUtentestatsControllerFn = async (req, res) => //request, response
 var statGetterControllerFn = async (req, res) => {
     try {
         const stats = await utentestatsServices.findStatsByEmail(req.user.email);
-
+        
         if (!stats) {
-            return res.status(404).json({ msg: 'statistiche irreperibili' });
+            return res.status(404).json({ msg: 'Statistiche irreperibili' });
         }
 
-        // Restituisci i dettagli dell'utente
-        console.log('retrieval avvenuto con successo')
         res.json({
             email: stats.email,
             totalgames: stats.totalgames,
+            gameswon: stats.gameswon,
+            gameslost: stats.gameslost,
+            won1: stats.won1,
+            won2: stats.won2,
+            won3: stats.won3,
+            won4: stats.won4,
+            won5: stats.won5,
+            won6: stats.won6
         });
+
     } catch (error) {
+        console.error(error);
         res.status(500).json({ msg: 'Errore del server' });
     }
-}
+};
 
-module.exports = {createUtentestatsControllerFn, statGetterControllerFn};
-//esporta le "funzioni" createUtenteControllerFN e loginUtenteControllerFN per darle a routes
+var updateUtentestatsControllerFn = async (req, res) => {
+    const { won, attempts } = req.body;
+    try {
+        const stats = await utentestatsServices.findStatsByEmail(req.user.email);
+
+        if (!stats) {
+            return res.status(404).json({ msg: 'Statistiche irreperibili' });
+        }
+
+        stats.totalgames += 1;
+        stats.gameswon += won ? 1 : 0;
+        stats.gameslost += won ? 0 : 1;
+        stats[`won${attempts}`] += won ? 1 : 0;
+
+        await stats.save();
+
+        res.json({ status: true, message: 'Statistiche aggiornate con successo' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ msg: 'Errore del server' });
+    }
+};
+
+
+module.exports = { createUtentestatsControllerFn, statGetterControllerFn, updateUtentestatsControllerFn };

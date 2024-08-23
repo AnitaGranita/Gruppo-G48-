@@ -1,20 +1,29 @@
 <template>
-  <div>
-    <h3>Ciao, {{user.nickname}}!</h3>
-    <linechart/>
-  </div>
+  <v-sheet>
+    <linechart />
     <div>
-    <button @click= "onLogin">
-      
-      tipregofunziona
-    </button>
-  </div>
+      <v-sheet class="text-center bg-slate-500 flex mx-auto ">
+        <v-card rounded class="bg-slate-500">
+          <p>Partite giocate:</p>
+          <p>{{ user.totalgames !== undefined ? user.totalgames : 'Dati non disponibili' }}</p>
+        </v-card>
+        <v-card rounded>
+          <p>Partite vinte:</p>
+          <p>{{ user.gameswon !== undefined ? user.gameswon : 'Dati non disponibili' }}</p>
+        </v-card>
+        <v-card rounded>
+          <p>Partite perse:</p>
+          <p>{{ user.gameslost !== undefined ? user.gameslost : 'Dati non disponibili' }}</p>
+        </v-card>
+      </v-sheet>
+    </div>
+  </v-sheet>
 </template>
-<script>
-import { mapGetters } from 'vuex'
-import linechart from '../components/LineChart.vue'
-import axios from 'axios'
 
+<script>
+import { mapGetters } from 'vuex';
+import linechart from '../components/LineChart.vue';
+import axios from 'axios';
 
 export default {
   components: {
@@ -27,32 +36,47 @@ export default {
     })
   },
   methods: {
-      async onLogin() {
-        await axios.post('/api/utente/getter')
+    async fetchUserStats() {
+      try {
+        const response = await axios.get('/api/utente/get-stats');
+        console.log('User stats received:', response.data);
+        this.$store.commit('auth/SET_USER', response.data); // Assicurati di aggiornare lo stato
+      } catch (error) {
+        console.error('Errore durante l\'ottenimento delle statistiche:', error);
+      }
     }
+  },
+  mounted() {
+    this.fetchUserStats(); // Chiama il metodo quando il componente viene montato
   }
-  
 }
 </script>
+
+<style scoped>
+/* I tuoi stili qui */
+</style>
 
 
 <style scoped>
 h1 {
-    text-align:center;
+  text-align: center;
 }
+
 h2 {
   font-weight: bold;
-  font-size:xx-large;
+  font-size: xx-large;
   text-align: center;
   color: #050780;
 }
+
 h3 {
-font-size: larger;
-font-weight: bold;
-text-align: center;
-color:black;
+  font-size: larger;
+  font-weight: bold;
+  text-align: center;
+  color: black;
 }
-h4{
+
+h4 {
   font-size: large;
   font-weight: bold;
   text-align: center;

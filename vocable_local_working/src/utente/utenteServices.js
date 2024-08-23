@@ -1,4 +1,5 @@
 const utenteModel = require('./utenteModel');
+const utentestatsModel = require('./utentestatsModel');
 const jwt = require('jsonwebtoken');
 const encryptor = require('simple-encryptor')('hqBzkw4H7Iog6561'); // chiave per criptare le password
 
@@ -73,6 +74,7 @@ module.exports.findUserByEmail = (email) => {
         });
     });
 }
+
 
 // Funzione di logout (semplice, lato client)
 module.exports.logoutUtente = (req, res) => {

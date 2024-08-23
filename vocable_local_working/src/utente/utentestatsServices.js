@@ -46,3 +46,28 @@ module.exports.findStatsByEmail = (email) => {
         });
     });
 }
+
+
+// src/utente/utentestatsController.js
+module.exports.updateUtentestatsControllerFn = async (req, res) => {
+    const { won, attempts } = req.body;
+    try {
+        const stats = await utentestatsServices.findStatsByEmail(req.user.email);
+
+        if (!stats) {
+            return res.status(404).json({ status: false, message: 'Utente non trovato' });
+        }
+
+        stats.totalgames += 1;
+        stats.gameswon += won ? 1 : 0;
+        stats.gameslost += won ? 0 : 1;
+        stats[`won${attempts}`] += won ? 1 : 0;
+
+        await stats.save();
+
+        res.json({ status: true, message: 'Statistiche aggiornate con successo' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ status: false, message: 'Errore del server' });
+    }
+};
