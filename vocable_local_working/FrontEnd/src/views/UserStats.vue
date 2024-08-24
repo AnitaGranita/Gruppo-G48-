@@ -1,6 +1,13 @@
 <template>
   <v-sheet>
-    <linechart />
+    <BarChart 
+      :won1="user.won1 !== undefined ? user.won1 : 0"
+      :won2="user.won2 !== undefined ? user.won2 : 0"
+      :won3="user.won3 !== undefined ? user.won3 : 0"
+      :won4="user.won4 !== undefined ? user.won4 : 0"
+      :won5="user.won5 !== undefined ? user.won5 : 0"
+      :won6="user.won6 !== undefined ? user.won6 : 0"
+    />
     <div>
       <v-sheet class="text-center bg-slate-500 flex mx-auto ">
         <v-card rounded class="bg-slate-500">
@@ -22,12 +29,12 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import linechart from '../components/LineChart.vue';
+import BarChart from '@/components/BarChart.vue'
 import axios from 'axios';
 
 export default {
   components: {
-    linechart,
+    BarChart,
   },
   computed: {
     ...mapGetters({
