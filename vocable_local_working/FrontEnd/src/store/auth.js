@@ -1,44 +1,44 @@
- import axios from 'axios';
+import axios from 'axios';
 
-export default{
+export default {
     namespaced: true,
-    state:{
-        token:null,
-        user:null,
+    state: {
+        token: null,
+        user: null,
     },
-    mutations:{
-        SET_TOKEN(state,token){ //salva il token nello state
+    mutations: {
+        SET_TOKEN(state, token) { //salva il token nello state
             state.token = token
         },
-        SET_USER(state,data){ //salva i dati dell'user nello state
+        SET_USER(state, data) { //salva i dati dell'user nello state
             state.user = data
         }
     },
 
-    getters:{
-        authenticated(state){
+    getters: {
+        authenticated(state) {
             return state.token && state.user
         },
-        user(state){
+        user(state) {
             return state.user
         }
     },
 
 
-    actions:{
-        async signIn({dispatch},credentials){
+    actions: {
+        async signIn({ dispatch }, credentials) {
             let response = await axios.post('/api/utente/login', credentials)
-            return dispatch('attempt',response.data.token)
+            return dispatch('attempt', response.data.token)
         },
-        async attempt({ commit, state }, token) {  
+        async attempt({ commit, state }, token) {
             if (token) {
                 commit('SET_TOKEN', token);
             }
-    
-            if (!state.token) { 
+
+            if (!state.token) {
                 return;
             }
-            try{
+            try {
                 let response = await axios.get('/api/utente/me')/*,{
                     headers:{
                         'Authorization':'Bearer ' + token
@@ -48,13 +48,13 @@ export default{
                 if (response.data) {
                     commit('SET_USER', response.data);
                     console.log(response.data)
-                  } else {
+                } else {
                     throw new Error('Dati utente mancanti');
-                  }
+                }
             }
-            catch(e){
-                commit('SET_TOKEN',null)
-                commit('SET_USER',null)
+            catch (e) {
+                commit('SET_TOKEN', null)
+                commit('SET_USER', null)
                 console.log('Salvataggio del token non riuscito')
             }
         },
@@ -68,6 +68,6 @@ export default{
             commit('SET_TOKEN', null); // Rimuovi il token dallo store
             commit('SET_USER', null); // Resetta i dati utente
         }
-        
+
     }
 }

@@ -16,29 +16,33 @@ const state = reactive({
   },
 });
 
+// Computed per verificare se il gioco è stato vinto o perso
 const wonGame = computed(() =>
   state.guesses[state.currentGuessIndex - 1] === state.solution.word
 );
 
 const lostGame = computed(() => !wonGame.value && state.currentGuessIndex >= 6);
 
+// Funzione per ricaricare la pagina e iniziare un nuovo gioco
 const refreshPage = () => {
   window.location.reload(); // Ricarica la pagina corrente
 };
 
+// Funzione per gestire l'input da tastiera
 const handleInput = (key) => {
-  if (state.currentGuessIndex >= 6 || wonGame.value) {
-    if (wonGame.value || lostGame.value) {
-      updateUserStats(wonGame.value, state.currentGuessIndex); // Aggiorna le statistiche dell'utente
-    }
+  // Controlla se il gioco è terminato
+  if (wonGame.value || lostGame.value) {
+    console.log('Il gioco è terminato. Aggiorno le statistiche...');
+    updateUserStats(wonGame.value, state.currentGuessIndex); // Aggiorna le statistiche
     return;
   }
 
   const currentGuess = state.guesses[state.currentGuessIndex];
+
+  // Gestione del tasto "enter"
   if (key == "{enter}") {
     if (currentGuess.length == state.solution.word.length) {
-      state.currentGuessIndex++;
-      for (var i = 0; i < currentGuess.length; i++) {
+      for (let i = 0; i < currentGuess.length; i++) {
         let c = currentGuess.charAt(i);
         if (c == state.solution.word.charAt(i)) {
           state.guessedLetters.found.push(c.toUpperCase());
@@ -48,10 +52,21 @@ const handleInput = (key) => {
           state.guessedLetters.miss.push(c.toUpperCase());
         }
       }
+      state.currentGuessIndex++;
+
+      // Controllo immediato di vittoria o sconfitta
+      if (wonGame.value || lostGame.value) {
+        console.log('Il gioco è terminato. Aggiorno le statistiche...');
+        updateUserStats(wonGame.value, state.currentGuessIndex); // Aggiorna le statistiche
+      }
     }
-  } else if (key == "{bksp}") {
+  } 
+  // Gestione del tasto "backspace"
+  else if (key == "{bksp}") {
     state.guesses[state.currentGuessIndex] = currentGuess.slice(0, -1);
-  } else if (currentGuess.length < state.solution.word.length) {
+  } 
+  // Aggiunta del carattere se non è già completo
+  else if (currentGuess.length < state.solution.word.length) {
     const alphaRegex = /[A-Za-z]/;
     if (alphaRegex.test(key)) {
       state.guesses[state.currentGuessIndex] += key.toLowerCase();
@@ -59,97 +74,122 @@ const handleInput = (key) => {
   }
 };
 
+// Funzione per aggiornare le statistiche dell'utente
 const updateUserStats = async (won, attempts) => {
   try {
-    // Recupera le statistiche correnti dell'utente
-    const response = await axios.get('/api/utente/get-stats');
-    const currentStats = response.data;
-
-    // Prepara le nuove statistiche
-    const updatedStats = {
-      email: currentStats.email,
-      totalgames: currentStats.totalgames + 1, // Incrementa il numero totale di giochi
-      gameswon: won ? currentStats.gameswon + 1 : currentStats.gameswon,
-      gameslost: !won ? currentStats.gameslost + 1 : currentStats.gameslost,
-      won1: won && state.currentGuessIndex === 1 ? currentStats.won1 + 1 : currentStats.won1,
-      won2: won && state.currentGuessIndex === 2 ? currentStats.won2 + 1 : currentStats.won2,
-      won3: won && state.currentGuessIndex === 3 ? currentStats.won3 + 1 : currentStats.won3,
-      won4: won && state.currentGuessIndex === 4 ? currentStats.won4 + 1 : currentStats.won4,
-      won5: won && state.currentGuessIndex === 5 ? currentStats.won5 + 1 : currentStats.won5,
-      won6: won && state.currentGuessIndex === 6 ? currentStats.won6 + 1 : currentStats.won6
-    };
-
-    // Invia le statistiche aggiornate al server
-    await axios.post('/api/utente/update-stats', updatedStats);
+    console.log(`Updating stats: won=${won}, attempts=${attempts}`);
+    await axios.post('/api/utente/update-stats', { won, attempts });
     console.log('Statistiche aggiornate con successo');
   } catch (error) {
     console.error('Errore durante l\'aggiornamento delle statistiche:', error);
   }
 };
 
+// Aggiunge il listener per la tastiera una volta montato il componente
 onMounted(() => {
   window.addEventListener("keyup", (e) => {
     e.preventDefault();
     let key =
       e.code == "Enter"
-        ? "{enter}"
-        : e.code == "Backspace"
-        ? "{bksp}"
-        : e.key;
+      ? "{enter}"
+      : e.code== "Backspace"
+      ? "{bksp}"
+      : e.code== "Tab"
+      ? ""
+      : e.code== "ControlLeft"
+      ? ""
+      : e.code== "ControlRight"
+      ? ""
+      : e.code== "ShiftLeft"
+      ? ""
+      : e.code== "CapsLock"
+      ? ""
+      : e.code== "AltRight"
+      ? ""
+      :e.key;
     handleInput(key);
   });
 });
 </script>
 
 <template>
-  <div class="wrapperwords">
-    <div>
-      <word-row
-        v-for="(guess, i) in state.guesses"
-        :key="i"
-        :value="guess"
-        :solution="state.solution.word"
-        :submitted="i < state.currentGuessIndex"
-      />
+  <v-sheet class="content-wrapper">
+    <div class="wrapperwords">
+      <div>
+        <!-- Mostra le righe delle parole -->
+        <word-row
+          v-for="(guess, i) in state.guesses"
+          :key="i"
+          :value="guess"
+          :solution="state.solution.word"
+          :submitted="i < state.currentGuessIndex"
+        />
+      </div>
+
+      <!-- Messaggio di vittoria o sconfitta -->
+      <p v-if="wonGame" class="text-center">
+        Congratulazioni! Hai trovato la soluzione!
+      </p>
+      <p v-else-if="lostGame" class="text-center">
+        Hai perso! Riprova, magari la prossima la indovini!
+      </p>
+
+      <!-- Definizione della parola -->
+      <div class="text-center ma-10">
+        <span>
+          <p class="rounded font-semibold text-h5 text-blue-700">Definizione:</p>
+          <p class="rounded font-medium font-italic text-h6 text-black">
+            {{ state.solution.definition }}
+          </p>
+        </span>
+      </div>
+
+      <!-- Componente della tastiera -->
+      <simple-keyboard @onKeyPress="handleInput" :guessedLetters="state.guessedLetters" />
+
+      <!-- Bottone per ricaricare la pagina e iniziare un nuovo gioco -->
+      <div class="button-wrapper">
+        <v-btn
+          rounded="xl"
+          size="x-large"
+          elevation="8"
+          v-ripple
+          color="blue"
+          class="refresh-button"
+          v-if="wonGame || lostGame"
+          @click="refreshPage"
+        >
+          Prossima parola
+        </v-btn>
+      </div>
     </div>
-    <p v-if="wonGame" class="text-center">
-      Congratulations! Solution found :D
-    </p>
-    <p v-else-if="lostGame" class="text-center">
-      Out of tries. :(
-    </p>
-    <p class="text-center">
-      <span>
-        <p class="rounded font-semibold text-blue-700">Definizione:</p>
-        <p class="rounded font-medium font-italic text-black"> {{ state.solution.definition }}</p>
-      </span>
-    </p>
-    <simple-keyboard @onKeyPress="handleInput" :guessedLetters="state.guessedLetters" />
-  </div>
-  <div>
-    <button 
-      v-if="wonGame || lostGame"
-      @click="refreshPage" 
-      class="refresh-button">
-      Prossima parola
-    </button>
-  </div>
+  </v-sheet>
 </template>
 
 <style scoped>
-.refresh-button {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  padding: 10px 20px;
-  background-color: #1a56db;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+.content-wrapper {
+  min-height: 100vh; 
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; 
+  overflow-y: auto; /* Abilitare lo scrolling verticale se necessario */
 }
 
-.refresh-button:hover {
-  background-color: #1445ae;
+.wrapperwords {
+  flex: 1;
 }
+
+.button-wrapper {
+  display: flex;
+  justify-content: center; 
+  margin-top: 20px; 
+}
+
+.refresh-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+  
 </style>
