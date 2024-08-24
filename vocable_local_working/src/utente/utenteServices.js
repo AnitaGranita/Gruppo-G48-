@@ -52,7 +52,7 @@ module.exports.loginUtenteDBService = (utenteDetails) => {
                         };
                         resolve(body);
                     } else {
-                        reject({ status: false, msg: "Password errata" ,token : '0',id: '0'});
+                        reject({ status: false, msg: "Password e/o email errati" ,token : '0',id: '0'});
                     }
                 } else {
                     reject({ status: false, msg: "Dati non validi" ,token : '0',id: '0'});

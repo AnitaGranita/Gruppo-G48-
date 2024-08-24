@@ -82,7 +82,8 @@ export default {
           password: this.password
         }
 
-        await this.signIn(credentials);
+        const response = await this.signIn(credentials);
+        alert(response.data.message)
         this.$router.replace({ name: 'userstats' });
 
       } catch (error) {

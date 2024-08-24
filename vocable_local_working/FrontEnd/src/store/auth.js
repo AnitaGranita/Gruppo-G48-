@@ -28,7 +28,8 @@ export default {
     actions: {
         async signIn({ dispatch }, credentials) {
             let response = await axios.post('/api/utente/login', credentials)
-            return dispatch('attempt', response.data.token)
+            dispatch('attempt',response.data.token)
+            return response;
         },
         async attempt({ commit, state }, token) {
             if (token) {
