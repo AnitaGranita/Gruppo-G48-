@@ -1,93 +1,30 @@
 <template>
-  <div class="chart-container mx-auto">
     <Bar
       id="my-chart-id"
       :options="chartOptions"
-      :data="computedChartData"
+      :data="chartData"
     />
-  </div>
-</template>
-
-<script>
-import { Bar } from 'vue-chartjs'
-import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
-
-ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
-
-export default {
-  name: 'BarChart',
-  components: { Bar },
-  props: {
-    won1: { type: Number, required: true },
-    won2: { type: Number, required: true },
-    won3: { type: Number, required: true },
-    won4: { type: Number, required: true },
-    won5: { type: Number, required: true },
-    won6: { type: Number, required: true },
-  },
-  computed: {
-    computedChartData() {
+  </template>
+  
+  <script>
+  import { Bar } from 'vue-chartjs'
+  import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
+  
+  ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
+  
+  export default {
+    name: 'BarChart',
+    components: { Bar },
+    data() {
       return {
-        labels: [ 'Partite vinte in 1', 'Partite vinte in 2', 'Partite vinte in 3', 'Partite vinte in 4', 'Partite vinte in 5', 'Partite vinte in 6' ],
-        datasets: [ 
-          {
-            data: [this.won1, this.won2, this.won3, this.won4, this.won5, this.won6], // Usa i dati passati come props
-            backgroundColor: (context) => {
-              const chart = context.chart;
-              const { ctx, chartArea } = chart;
-              if (!chartArea) {
-                return null;
-              }
-              // Crea un gradiente per le barre
-              const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-              gradient.addColorStop(0, 'rgba(0, 123, 255, 0.5)');
-              gradient.addColorStop(1, 'rgba(0, 0, 255, 0.5)');
-              return gradient;
-            },
-            borderRadius: 5,
-            borderSkipped: false
-          }
-        ]
-      }
-    }
-  },
-  data() {
-    return {
-      chartOptions: {
-        responsive: true,
-        plugins: {
-          legend: {
-            display: false // Nasconde la legenda
-          },
-          tooltip: {
-            callbacks: {
-              label: function(tooltipItem) {
-                return `Value: ${tooltipItem.raw}`;
-              }
-            }
-          }
+        chartData: {
+          labels: [ 'January', 'February', 'March' ],
+          datasets: [ { data: [40, 20, 12] } ]
         },
-        scales: {
-          x: {
-            beginAtZero: true,
-            grid: {
-              display: false
-            }
-          },
-          y: {
-            beginAtZero: true
-          }
+        chartOptions: {
+          responsive: true
         }
       }
     }
   }
-}
-</script>
-
-<style scoped>
-.chart-container {
-  margin-top: 50px;
-  width: 800px;
-  height: 500px;
-}
-</style>
+  </script>
